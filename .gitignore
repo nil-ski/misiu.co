@@ -1,0 +1,24 @@
+# Hugo
+public/
+resources/_gen/
+.hugo_build.lock
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Runtime data
+*.pid
+*.seed
+*.pid.lock
+
+# Temporary files
+*.tmp
+*.temp

@@ -1,0 +1,18 @@
+{{ define "main" }}
+  <div class="home-content">
+    {{ .Content }}
+  </div>
+  
+  {{ if site.RegularPages }}
+    <section class="recent-posts">
+      <h2>Recent Posts</h2>
+      {{ range first 5 site.RegularPages }}
+        <article>
+          <h3><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h3>
+          <time>{{ .Date.Format "January 2, 2006" }}</time>
+          <p>{{ .Summary }}</p>
+        </article>
+      {{ end }}
+    </section>
+  {{ end }}
+{{ end }}

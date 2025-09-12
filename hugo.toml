@@ -1,0 +1,13 @@
+baseURL = 'https://nil-ski.github.io/misiu.co'
+languageCode = 'en-us'
+title = 'misiu.co'
+description = 'Personal website'
+theme = 'basic'
+
+[params]
+  author = 'Maciej Misiu'
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
