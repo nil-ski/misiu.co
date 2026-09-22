@@ -1,0 +1,96 @@
+---
+/**
+ * Soft, slowly drifting colour blobs with a paper-grain overlay.
+ * Purely decorative — sits behind the page header.
+ */
+---
+
+<div class="aurora" aria-hidden="true">
+  <span class="blob b1"></span>
+  <span class="blob b2"></span>
+  <span class="blob b3"></span>
+  <span class="blob b4"></span>
+  <svg class="grain" xmlns="http://www.w3.org/2000/svg">
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"></feTurbulence>
+      <feColorMatrix type="saturate" values="0"></feColorMatrix>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#grain)"></rect>
+  </svg>
+</div>
+
+<style>
+  .aurora {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: min(46rem, 110vh);
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+    mask-image: linear-gradient(to bottom, #000 45%, transparent);
+  }
+
+  .blob {
+    position: absolute;
+    width: 42vmax;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: 0.55;
+    mix-blend-mode: multiply;
+    animation: drift 26s ease-in-out infinite alternate;
+  }
+
+  .b1 {
+    background: var(--lemon);
+    top: -18vmax;
+    left: -8vmax;
+  }
+  .b2 {
+    background: var(--coral);
+    top: -22vmax;
+    right: -6vmax;
+    opacity: 0.35;
+    animation-duration: 32s;
+    animation-delay: -8s;
+  }
+  .b3 {
+    background: var(--sky);
+    top: -4vmax;
+    right: 22vw;
+    width: 26vmax;
+    opacity: 0.25;
+    animation-duration: 38s;
+    animation-delay: -16s;
+  }
+  .b4 {
+    background: var(--mint);
+    top: 2vmax;
+    left: 18vw;
+    width: 22vmax;
+    opacity: 0.25;
+    animation-duration: 30s;
+    animation-delay: -4s;
+  }
+
+  @keyframes drift {
+    0% {
+      transform: translate(0, 0) scale(1);
+    }
+    50% {
+      transform: translate(6vw, 3vh) scale(1.12);
+    }
+    100% {
+      transform: translate(-4vw, 6vh) scale(0.94);
+    }
+  }
+
+  .grain {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.2;
+    mix-blend-mode: multiply;
+  }
+</style>

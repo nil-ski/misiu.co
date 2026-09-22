@@ -1,0 +1,160 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { formatDate, getPosts, type Post } from '../../lib/posts';
+import '../../styles/prose.css';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, newer: posts[i - 1], older: posts[i + 1] },
+  }));
+}
+
+interface Props {
+  post: Post;
+  newer?: Post;
+  older?: Post;
+}
+
+const { post, newer, older } = Astro.props;
+const { Content } = await render(post.entry);
+---
+
+<Base title={post.title} description={post.description} type="article">
+  <meta slot="head" property="article:published_time" content={post.date.toISOString()} />
+
+  <article>
+    <header class="measure post-header">
+      <p class="meta">
+        <time datetime={post.date.toISOString()}>{formatDate(post.date)}</time>
+        <span aria-hidden="true">·</span>
+        <span>{post.readingMinutes} min read</span>
+        {post.draft && <span class="draft">draft</span>}
+      </p>
+      <h1>{post.title}</h1>
+      {
+        post.tags.length > 0 && (
+          <ul class="tags">
+            {post.tags.map((tag) => (
+              <li>#{tag}</li>
+            ))}
+          </ul>
+        )
+      }
+    </header>
+
+    <div class="measure prose">
+      <Content />
+    </div>
+  </article>
+
+  <nav class="measure pager" aria-label="More posts">
+    {
+      older ? (
+        <a class="older" href={`/writing/${older.id}`}>
+          <span class="eyebrow">← Older</span>
+          <span>{older.title}</span>
+        </a>
+      ) : (
+        <span />
+      )
+    }
+    {
+      newer && (
+        <a class="newer" href={`/writing/${newer.id}`}>
+          <span class="eyebrow">Newer →</span>
+          <span>{newer.title}</span>
+        </a>
+      )
+    }
+  </nav>
+</Base>
+
+<style>
+  .post-header {
+    padding-block: clamp(2.5rem, 8vw, 5rem) 2rem;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+  }
+
+  h1 {
+    font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+    font-variation-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 144;
+    letter-spacing: -0.03em;
+    margin: 0.6rem 0 0;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    padding: 0;
+    margin: 1.25rem 0 0;
+  }
+
+  .tags li,
+  .draft {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--sky) 12%, transparent);
+    color: color-mix(in srgb, var(--sky) 70%, var(--ink));
+  }
+
+  .draft {
+    background: var(--lemon);
+    color: var(--ink);
+  }
+
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 4rem;
+  }
+
+  .pager a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1.1rem 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    line-height: 1.3;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .pager a:hover {
+    border-color: var(--coral);
+    transform: translateY(-2px);
+  }
+
+  .newer {
+    text-align: right;
+    grid-column: 2;
+  }
+
+  @media (max-width: 36rem) {
+    .pager {
+      grid-template-columns: 1fr;
+    }
+    .newer {
+      grid-column: 1;
+    }
+  }
+</style>

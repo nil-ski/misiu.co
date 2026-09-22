@@ -1,0 +1,36 @@
+---
+import { SITE } from '../consts';
+const year = new Date().getFullYear();
+---
+
+<footer class="wrap site-footer">
+  <p>© {year} {SITE.author}</p>
+  <ul>
+    <li><a href="/rss.xml">RSS</a></li>
+    <li><a href="/writing">Archive</a></li>
+  </ul>
+</footer>
+
+<style>
+  .site-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 6rem;
+    padding-block: 2rem 2.5rem;
+    border-top: 1px dashed var(--line);
+    font-size: 0.88rem;
+    color: var(--ink-faint);
+  }
+  p {
+    margin: 0;
+  }
+  ul {
+    display: flex;
+    gap: 1.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+</style>

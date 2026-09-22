@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/prose.css';
+---
+
+<Base title="About" description="A little about Nils.">
+  <section class="measure intro">
+    <p class="eyebrow">About</p>
+    <h1>Hi, I'm <span class="mark">Nils</span>.</h1>
+  </section>
+
+  <div class="measure prose">
+    <p>
+      This is placeholder copy — swap it for a few lines about who you are, what you do and what
+      you'd like people to get in touch about.
+    </p>
+    <p>
+      This site used to live at <a href="https://misiu.co">misiu.co</a>. It's now <strong>nil.ski</strong>,
+      built with Astro and written in Ulysses.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .intro {
+    padding-block: clamp(2.5rem, 8vw, 5rem) 1.5rem;
+  }
+  h1 {
+    font-size: clamp(2.6rem, 7vw, 4.5rem);
+    letter-spacing: -0.035em;
+    font-variation-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 144;
+    margin: 0.4rem 0 0;
+  }
+</style>

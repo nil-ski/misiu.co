@@ -1,0 +1,92 @@
+---
+import { NAV } from '../consts';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+
+<header class="wrap site-header">
+  <a class="logo" href="/" aria-label="nil.ski — home">
+    nil<span class="dot">.</span>ski
+  </a>
+  <nav aria-label="Main">
+    <ul>
+      {
+        NAV.map((item) => (
+          <li>
+            <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1.5rem;
+  }
+
+  .logo {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-variation-settings: 'SOFT' 100, 'WONK' 1;
+    letter-spacing: -0.03em;
+    text-decoration: none;
+  }
+
+  .dot {
+    color: var(--coral);
+    display: inline-block;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .logo:hover .dot {
+    transform: translateY(-0.35em) scale(1.4);
+  }
+
+  ul {
+    display: flex;
+    gap: 0.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0.3rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--paper) 65%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--ink) 8%, transparent);
+  }
+
+  nav a {
+    display: block;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--ink-soft);
+  }
+
+  nav a:hover {
+    color: var(--ink);
+  }
+
+  nav a[aria-current='page'] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  @media (max-width: 26rem) {
+    nav a {
+      padding-inline: 0.6rem;
+    }
+  }
+</style>
