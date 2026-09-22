@@ -39,6 +39,7 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
     font-weight: 700;
     font-variation-settings: 'SOFT' 100, 'WONK' 1;
     letter-spacing: -0.03em;
+    white-space: nowrap;
     text-decoration: none;
   }
 
@@ -84,9 +85,16 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
     color: var(--paper);
   }
 
-  @media (max-width: 26rem) {
+  @media (max-width: 30rem) {
+    .logo {
+      font-size: 1.3rem;
+    }
+    ul {
+      gap: 0;
+    }
     nav a {
-      padding-inline: 0.6rem;
+      padding-inline: 0.55rem;
+      font-size: 0.85rem;
     }
   }
 </style>

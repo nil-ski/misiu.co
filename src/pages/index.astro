@@ -2,9 +2,12 @@
 import Base from '../layouts/Base.astro';
 import PostList from '../components/PostList.astro';
 import SlalomTrail from '../components/SlalomTrail.astro';
+import AlbumCard from '../components/AlbumCard.astro';
 import { getPosts } from '../lib/posts';
+import { getAlbums } from '../lib/photos';
 
 const posts = (await getPosts()).slice(0, 5);
+const albums = (await getAlbums()).slice(0, 3);
 ---
 
 <Base>
@@ -24,6 +27,22 @@ const posts = (await getPosts()).slice(0, 5);
     </header>
     {posts.length ? <PostList posts={posts} /> : <p class="empty">Nothing here yet — first post coming soon.</p>}
   </section>
+
+  {
+    albums.length > 0 && (
+      <section class="wrap latest">
+        <header>
+          <h2>Recent photos</h2>
+          <a href="/photos">All albums →</a>
+        </header>
+        <div class="albums">
+          {albums.map((album, i) => (
+            <AlbumCard album={album} index={i} />
+          ))}
+        </div>
+      </section>
+    )
+  }
 </Base>
 
 <style>
@@ -75,6 +94,13 @@ const posts = (await getPosts()).slice(0, 5);
   .latest header a {
     font-size: 0.92rem;
     color: var(--ink-soft);
+  }
+
+  .albums {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+    gap: 2rem clamp(1.5rem, 4vw, 3rem);
+    margin-top: 1.5rem;
   }
 
   .empty {

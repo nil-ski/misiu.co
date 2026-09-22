@@ -1,0 +1,286 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { formatExif, type Photo } from '../lib/photos';
+import { formatDate } from '../lib/posts';
+
+interface Props {
+  photos: Photo[];
+  title: string;
+}
+const { photos, title } = Astro.props;
+
+const items = await Promise.all(
+  photos.map(async (photo) => {
+    const large = await getImage({ src: photo.image, width: Math.min(2400, photo.image.width), format: 'webp' });
+    return { photo, large: large.src, ratio: photo.image.width / photo.image.height };
+  }),
+);
+---
+
+<div class="gallery">
+  {
+    items.map(({ photo, large, ratio }, i) => (
+      <a
+        id={`photo-${photo.id}`}
+        class="tile"
+        href={large}
+        style={`--ar:${ratio.toFixed(4)}`}
+        data-index={i}
+        data-caption={photo.exif.caption ?? ''}
+        data-exif={formatExif(photo.exif).join(' · ')}
+        data-taken={photo.exif.taken ? formatDate(photo.exif.taken) : ''}
+      >
+        <Image
+          src={photo.image}
+          alt={photo.alt}
+          widths={[480, 800, 1200, 1600]}
+          sizes={`(max-width: 40rem) 100vw, ${Math.round(ratio * 22)}rem`}
+          loading={i < 4 ? 'eager' : 'lazy'}
+        />
+      </a>
+    ))
+  }
+</div>
+
+<dialog class="lightbox" aria-label={`${title} — photo viewer`}>
+  <figure>
+    <img alt="" />
+    <figcaption>
+      <span class="caption"></span>
+      <span class="exif"></span>
+    </figcaption>
+  </figure>
+  <button class="nav prev" type="button" aria-label="Previous photo">←</button>
+  <button class="nav next" type="button" aria-label="Next photo">→</button>
+  <button class="close" type="button" aria-label="Close" autofocus>×</button>
+  <span class="count"></span>
+</dialog>
+
+<script>
+  for (const gallery of document.querySelectorAll<HTMLElement>('.gallery')) {
+    const dialog = gallery.nextElementSibling as HTMLDialogElement;
+    const tiles = [...gallery.querySelectorAll<HTMLAnchorElement>('.tile')];
+    const img = dialog.querySelector('img')!;
+    const caption = dialog.querySelector('.caption')!;
+    const exif = dialog.querySelector('.exif')!;
+    const count = dialog.querySelector('.count')!;
+    let current = 0;
+
+    const show = (index: number) => {
+      current = (index + tiles.length) % tiles.length;
+      const tile = tiles[current];
+      const thumb = tile.querySelector('img')!;
+      img.src = tile.href;
+      img.alt = thumb.alt;
+      caption.textContent = tile.dataset.caption ?? '';
+      exif.textContent = [tile.dataset.exif, tile.dataset.taken].filter(Boolean).join(' · ');
+      count.textContent = `${current + 1} / ${tiles.length}`;
+      history.replaceState(null, '', `#${tile.id}`);
+    };
+
+    const open = (index: number) => {
+      show(index);
+      if (!dialog.open) dialog.showModal();
+    };
+
+    tiles.forEach((tile, i) =>
+      tile.addEventListener('click', (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey) return;
+        event.preventDefault();
+        open(i);
+      }),
+    );
+
+    dialog.querySelector('.prev')!.addEventListener('click', () => show(current - 1));
+    dialog.querySelector('.next')!.addEventListener('click', () => show(current + 1));
+    dialog.querySelector('.close')!.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('close', () => history.replaceState(null, '', location.pathname));
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+    dialog.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') show(current - 1);
+      if (event.key === 'ArrowRight') show(current + 1);
+    });
+
+    let touchX = 0;
+    dialog.addEventListener('touchstart', (e) => (touchX = e.touches[0].clientX), { passive: true });
+    dialog.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 50) show(current + (dx < 0 ? 1 : -1));
+    });
+
+    // Deep links: /photos/album#photo-3 opens that photo
+    const linked = tiles.findIndex((tile) => `#${tile.id}` === location.hash);
+    if (linked >= 0) open(linked);
+  }
+</script>
+
+<style>
+  /* Justified rows: every tile keeps its aspect ratio, rows fill the width. */
+  .gallery {
+    --row: 17rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .gallery::after {
+    content: '';
+    flex-grow: 999999;
+  }
+
+  .tile {
+    flex-grow: calc(var(--ar) * 100);
+    flex-basis: calc(var(--ar) * var(--row));
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    background: var(--paper-2);
+    cursor: zoom-in;
+  }
+
+  .tile img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--ar);
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1), filter 0.3s;
+  }
+
+  .tile:hover img {
+    transform: scale(1.035);
+  }
+
+  @media (max-width: 40rem) {
+    .gallery {
+      --row: 9rem;
+      gap: 0.35rem;
+    }
+  }
+
+  /* Lightbox */
+  .lightbox {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: color-mix(in srgb, var(--paper) 94%, transparent);
+    color: var(--ink);
+  }
+
+  .lightbox::backdrop {
+    background: transparent;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .lightbox[open] {
+    display: grid;
+    place-items: center;
+    animation: fade 0.25s ease-out;
+  }
+
+  figure {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 3.5rem 1rem 1.5rem;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  figure img {
+    max-width: min(100%, 90rem);
+    max-height: calc(100dvh - 9rem);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border: 8px solid #fff;
+    border-radius: 0.4rem;
+    box-shadow: 0 30px 60px -25px rgb(29 27 24 / 0.45);
+  }
+
+  figcaption {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    text-align: center;
+    min-height: 2.8rem;
+  }
+
+  .caption {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.1rem;
+  }
+
+  .exif,
+  .count {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+  }
+
+  .count {
+    position: absolute;
+    top: 1.4rem;
+    left: 1.5rem;
+  }
+
+  button {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  button:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .close {
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+  }
+
+  .prev {
+    left: 1rem;
+    top: 50%;
+  }
+
+  .next {
+    right: 1rem;
+    top: 50%;
+  }
+
+  @media (max-width: 40rem) {
+    .nav {
+      top: auto;
+      bottom: 1rem;
+    }
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+  }
+</style>

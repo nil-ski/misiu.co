@@ -3,9 +3,7 @@
   color: var(--ink);
 }
 
-.prose p,
-.prose ul,
-.prose ol {
+.prose :where(p, ul, ol) {
   margin-block: 0;
 }
 
@@ -78,6 +76,17 @@
   display: block;
   border-radius: var(--radius);
   margin-inline: auto;
+}
+
+/* A photo on its own line breaks out wider than the text column */
+.prose p:has(> img:only-child) {
+  width: min(100vw - 2 * var(--gutter), 60rem);
+  margin-inline: 50%;
+  translate: -50% 0;
+}
+
+.prose p:has(> img:only-child) img {
+  width: 100%;
 }
 
 .prose figure {
