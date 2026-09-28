@@ -4,11 +4,8 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="wrap site-footer">
-  <p>© {year} {SITE.author}</p>
-  <ul>
-    <li><a href="/rss.xml">RSS</a></li>
-    <li><a href="/writing">Archive</a></li>
-  </ul>
+  <p>Thanks for stopping by. — {SITE.author}, {year}</p>
+  <p><a href="/rss.xml">RSS</a></p>
 </footer>
 
 <style>
@@ -16,21 +13,15 @@ const year = new Date().getFullYear();
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 0.5rem 1rem;
     margin-top: 6rem;
-    padding-block: 2rem 2.5rem;
-    border-top: 1px dashed var(--line);
-    font-size: 0.88rem;
+    padding-block: 1.5rem 2.5rem;
+    border-top: 1px solid var(--line);
+    font-style: italic;
+    font-size: 0.95rem;
     color: var(--ink-faint);
   }
   p {
     margin: 0;
-  }
-  ul {
-    display: flex;
-    gap: 1.25rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
   }
 </style>

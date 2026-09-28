@@ -1,114 +1,150 @@
 ---
 import Base from '../layouts/Base.astro';
-import PostList from '../components/PostList.astro';
-import AlbumCard from '../components/AlbumCard.astro';
-import { getPosts } from '../lib/posts';
+import Prints from '../components/Prints.astro';
+import { formatDate, getPosts } from '../lib/posts';
 import { getAlbums } from '../lib/photos';
 
-const posts = (await getPosts()).slice(0, 5);
-const albums = (await getAlbums()).slice(0, 3);
+const posts = await getPosts();
+const albums = await getAlbums();
+
+// A handful of recent photos, taken round-robin from the newest albums
+const prints = [];
+for (let i = 0; prints.length < 5 && i < 5; i++) {
+  for (const album of albums.slice(0, 3)) {
+    const photo = album.photos[i];
+    if (photo && prints.length < 5) prints.push({ photo, href: `/photos/${album.id}#photo-${photo.id}` });
+  }
+}
+
+// Writing and photo albums in one journal-like stream
+const recent = [
+  ...posts.map((post) => ({ date: post.date, title: post.title, href: `/writing/${post.id}`, kind: '' })),
+  ...albums.map((album) => ({
+    date: album.date,
+    title: album.title,
+    href: `/photos/${album.id}`,
+    kind: `${album.photos.length} photos`,
+  })),
+]
+  .sort((a, b) => b.date.valueOf() - a.date.valueOf())
+  .slice(0, 10);
 ---
 
 <Base>
-  <section class="wrap hero">
-    <p class="eyebrow">
-      <span lang="sv">Hej</span> · <span lang="pl">Cześć</span> · Hi — I'm Nils
+  <section class="wrap hello">
+    <h1><span lang="sv">Hej</span>, I'm Nils.</h1>
+    <p>
+      This is my corner of the internet, where I write about things I make and the tools I use, and keep
+      the photographs I take along the way.
     </p>
-    <h1>
-      I write about <span class="mark">making things</span>, the tools I use, and the photos I take
-      <em>along the way</em>.
-    </h1>
-    <p class="name-note">
-      Swedish name, Polish roots — <a href="/about#the-name">why nil.ski?</a>
+    <p class="small">
+      Swedish name, Polish roots — <a href="/about#the-name">that's where nil.ski comes from</a>.
     </p>
   </section>
 
-  <section class="wrap latest">
-    <header>
-      <h2>Latest writing</h2>
-      <a href="/writing">All posts →</a>
-    </header>
-    {posts.length ? <PostList posts={posts} /> : <p class="empty">Nothing here yet — first post coming soon.</p>}
-  </section>
+  {prints.length > 0 && <Prints prints={prints} />}
 
-  {
-    albums.length > 0 && (
-      <section class="wrap latest">
-        <header>
-          <h2>Recent photos</h2>
-          <a href="/photos">All albums →</a>
-        </header>
-        <div class="albums">
-          {albums.map((album, i) => (
-            <AlbumCard album={album} index={i} />
-          ))}
-        </div>
-      </section>
-    )
-  }
+  <section class="wrap recent">
+    <h2>Recently</h2>
+    <ol>
+      {
+        recent.map((item) => (
+          <li>
+            <time datetime={item.date.toISOString()}>{formatDate(item.date, 'short')}</time>
+            <span>
+              <a href={item.href}>{item.title}</a>
+              {item.kind && <span class="kind">{item.kind}</span>}
+            </span>
+          </li>
+        ))
+      }
+    </ol>
+    <p class="more">
+      More in <a href="/writing">writing</a> and <a href="/photos">photos</a>.
+    </p>
+  </section>
 </Base>
 
 <style>
-  .hero {
-    padding-block: clamp(3rem, 10vw, 7rem) clamp(1rem, 4vw, 3rem);
+  .wrap {
+    width: min(100% - 2 * var(--gutter), 40rem);
+  }
+
+  .hello {
+    padding-block: clamp(2.5rem, 8vw, 4.5rem) 1.5rem;
   }
 
   h1 {
-    font-size: clamp(2.4rem, 6.2vw, 5rem);
-    font-weight: 480;
-    line-height: 1.04;
-    letter-spacing: -0.03em;
-    word-spacing: 0.04em;
-    max-width: 16ch;
-    margin: 0.5rem 0 0;
-    font-variation-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 144;
+    font-size: clamp(2.2rem, 6vw, 3.1rem);
+    font-variation-settings: 'SOFT' 100, 'WONK' 1;
+    margin: 0 0 1rem;
   }
 
-  h1 em {
-    font-style: italic;
-    padding-inline: 0.14em 0.12em;
-    color: var(--sky);
-  }
-
-  .name-note {
-    margin: 1.5rem 0 0;
+  .hello p {
+    margin: 0 0 0.8rem;
+    font-size: 1.15em;
     color: var(--ink-soft);
-    font-size: 0.95rem;
   }
 
-  .latest {
-    margin-top: clamp(2rem, 6vw, 4rem);
+  .hello .small {
+    font-size: 1em;
   }
 
-  .latest header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 0.5rem;
+  .recent {
+    margin-top: 3rem;
   }
 
-  .latest h2 {
-    font-size: 1.1rem;
-    font-family: var(--font-mono);
-    font-weight: 500;
-    letter-spacing: 0.02em;
+  h2 {
+    font-size: 1.35rem;
+    margin: 0 0 0.75rem;
+  }
+
+  ol {
+    list-style: none;
     margin: 0;
+    padding: 0;
   }
 
-  .latest header a {
-    font-size: 0.92rem;
-    color: var(--ink-soft);
-  }
-
-  .albums {
+  li {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
-    gap: 2rem clamp(1.5rem, 4vw, 3rem);
-    margin-top: 1.5rem;
+    grid-template-columns: 6.5rem 1fr;
+    gap: 1rem;
+    padding-block: 0.45rem;
   }
 
-  .empty {
+  time {
+    font-style: italic;
+    font-size: 0.92em;
     color: var(--ink-faint);
+    padding-top: 0.08em;
+  }
+
+  li a {
+    text-decoration-color: transparent;
+  }
+
+  li a:hover {
+    text-decoration-color: var(--coral);
+  }
+
+  .kind {
+    margin-left: 0.5rem;
+    font-style: italic;
+    font-size: 0.9em;
+    color: var(--ink-faint);
+  }
+
+  .more {
+    margin-top: 1.5rem;
+    font-style: italic;
+    color: var(--ink-faint);
+  }
+
+  @media (max-width: 30rem) {
+    li {
+      grid-template-columns: 1fr;
+      gap: 0;
+      padding-block: 0.55rem;
+    }
   }
 </style>

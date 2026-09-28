@@ -1,15 +1,16 @@
 @import '@fontsource-variable/fraunces/full.css';
 @import '@fontsource-variable/fraunces/full-italic.css';
-@import '@fontsource-variable/instrument-sans';
+@import '@fontsource-variable/newsreader/opsz.css';
+@import '@fontsource-variable/newsreader/opsz-italic.css';
 @import '@fontsource-variable/jetbrains-mono';
 
 :root {
-  --paper: #fbf8f2;
-  --paper-2: #f3eee4;
-  --ink: #1d1b18;
-  --ink-soft: #57524a;
-  --ink-faint: #8f887c;
-  --line: #e6dfd2;
+  --paper: #fcfaf6;
+  --paper-2: #f3efe7;
+  --ink: #23201c;
+  --ink-soft: #5a544b;
+  --ink-faint: #8d867a;
+  --line: #e7e1d6;
 
   --coral: #ff6a4d;
   --sky: #4d7cff;
@@ -20,11 +21,11 @@
   --accent: var(--coral);
 
   --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
-  --font-body: 'Instrument Sans Variable', system-ui, -apple-system, sans-serif;
+  --font-body: 'Newsreader Variable', 'Iowan Old Style', Georgia, serif;
   --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', monospace;
 
-  --measure: 40rem;
-  --wide: 68rem;
+  --measure: 36rem;
+  --wide: 62rem;
   --gutter: clamp(1rem, 4vw, 2rem);
   --radius: 1.25rem;
 
@@ -51,8 +52,9 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-body);
-  font-size: clamp(1.0625rem, 0.4vw + 0.95rem, 1.1875rem);
-  line-height: 1.65;
+  font-size: clamp(1.125rem, 0.4vw + 1rem, 1.25rem);
+  line-height: 1.6;
+  font-optical-sizing: auto;
   overflow-x: hidden;
 }
 
@@ -95,10 +97,10 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display);
-  font-weight: 560;
-  font-variation-settings: 'SOFT' 100, 'WONK' 0;
-  line-height: 1.12;
-  letter-spacing: -0.015em;
+  font-weight: 500;
+  font-variation-settings: 'SOFT' 50, 'WONK' 0;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
   text-wrap: balance;
 }
 
@@ -113,11 +115,13 @@ h4 {
 }
 
 .eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-style: italic;
+  font-size: 0.95rem;
   color: var(--ink-faint);
+}
+
+.eyebrow a {
+  color: inherit;
 }
 
 .sr-only {
@@ -127,20 +131,6 @@ h4 {
   overflow: hidden;
   clip: rect(0 0 0 0);
   white-space: nowrap;
-}
-
-/* Highlighter swipe used on emphasised words */
-.mark {
-  background: linear-gradient(transparent 58%, color-mix(in srgb, var(--mark, var(--lemon)) 75%, transparent) 58% 90%, transparent 90%)
-    no-repeat 0 0 / 0% 100%;
-  animation: swipe 0.9s 0.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-  padding-inline: 0.05em;
-}
-
-@keyframes swipe {
-  to {
-    background-size: 100% 100%;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
