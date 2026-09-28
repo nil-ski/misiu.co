@@ -1,0 +1,102 @@
+---
+/**
+ * A paper-cut rosette in the spirit of Łowicz wycinanki — the layered,
+ * multicoloured Polish folk cutouts. Each ring of petals unfolds on load.
+ * The signature ornament of nil.ski (Nils + the Polish "-ski").
+ */
+interface Props {
+  class?: string;
+  /** CSS width, e.g. "7rem". Defaults to filling its container. */
+  size?: string;
+}
+const { class: className, size } = Astro.props;
+
+/** A teardrop petal pointing up, from radius `base` out to `tip`. */
+function petal(base: number, tip: number, width: number) {
+  const shoulder = base + (tip - base) * 0.35;
+  const neck = base + (tip - base) * 0.85;
+  return `M0 ${-base} C ${width} ${-shoulder}, ${width * 0.55} ${-neck}, 0 ${-tip} C ${-width * 0.55} ${-neck}, ${-width} ${-shoulder}, 0 ${-base} Z`;
+}
+
+const around = (count: number, offset = 0) =>
+  Array.from({ length: count }, (_, i) => offset + (360 / count) * i);
+
+const rings = [
+  { color: 'var(--sky)', count: 12, path: petal(52, 98, 15), offset: 15 },
+  { color: 'var(--coral)', count: 12, path: petal(40, 90, 19), offset: 0 },
+  { color: 'var(--lemon)', count: 8, path: petal(26, 70, 22), offset: 22.5 },
+  { color: 'var(--mint)', count: 8, path: petal(20, 58, 16), offset: 0 },
+  { color: 'var(--lilac)', count: 12, path: petal(10, 36, 9), offset: 15 },
+];
+---
+
+<svg
+  class:list={['rosette', className]}
+  style={size ? `width:${size}` : undefined}
+  viewBox="-100 -100 200 200"
+  aria-hidden="true">
+  <g class="spin">
+    {
+      rings.map((ring, i) => (
+        <g class="ring" style={`--i:${i}`} fill={ring.color}>
+          {around(ring.count, ring.offset).map((angle) => (
+            <path d={ring.path} transform={`rotate(${angle})`} />
+          ))}
+        </g>
+      ))
+    }
+    <g class="ring" style="--i:5">
+      {around(8, 0).map((angle) => <circle cx="0" cy="-47" r="2.6" transform={`rotate(${angle})`} fill="var(--ink)" />)}
+    </g>
+    <g class="ring" style="--i:6">
+      <circle r="22" fill="var(--coral)"></circle>
+      <circle r="16" fill="var(--paper)"></circle>
+      <circle r="11" fill="var(--sky)"></circle>
+      {around(8).map((angle) => <circle cx="0" cy="-13.5" r="1.8" transform={`rotate(${angle})`} fill="var(--lemon)" />)}
+      <circle r="4.5" fill="var(--ink)"></circle>
+    </g>
+  </g>
+</svg>
+
+<style>
+  .rosette {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .spin {
+    transform-box: view-box;
+    transform-origin: center;
+    animation: turn 120s linear infinite;
+  }
+
+  .ring {
+    transform-origin: center;
+    transform-box: view-box;
+    opacity: 0;
+    /* each layer casts a hairline shadow, like stacked coloured paper */
+    filter: drop-shadow(0 1.5px 0.5px rgb(29 27 24 / 0.14));
+    animation: unfold 0.9s calc(0.15s + var(--i) * 0.12s) cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
+  }
+
+  @keyframes unfold {
+    from {
+      opacity: 0;
+      scale: 0.4;
+      rotate: -40deg;
+    }
+    to {
+      opacity: 1;
+      scale: 1;
+      rotate: 0deg;
+    }
+  }
+
+  @keyframes turn {
+    to {
+      rotate: 360deg;
+    }
+  }
+</style>

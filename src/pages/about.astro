@@ -1,9 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
+import Rosette from '../components/Rosette.astro';
 import '../styles/prose.css';
 ---
 
-<Base title="About" description="A little about Nils.">
+<Base title="About" description="A little about Nils, and where the name nil.ski comes from.">
   <section class="measure intro">
     <p class="eyebrow">About</p>
     <h1>Hi, I'm <span class="mark">Nils</span>.</h1>
@@ -11,14 +12,36 @@ import '../styles/prose.css';
 
   <div class="measure prose">
     <p>
-      This is placeholder copy — swap it for a few lines about who you are, what you do and what
-      you'd like people to get in touch about.
+      Placeholder copy — swap it for a few lines about who you are, what you do and what you'd like
+      people to get in touch about.
+    </p>
+
+    <h2 id="the-name">Why nil.ski?</h2>
+
+    <div class="name-card" aria-label="Nils plus -ski makes Nilski">
+      <span>Nils</span>
+      <span class="op">+</span>
+      <span class="suffix">-ski</span>
+      <span class="op">=</span>
+      <span class="result">Nil<em>ski</em></span>
+    </div>
+
+    <p>
+      My mum is Polish; her surname is Kotowska. I grew up with a Swedish surname instead, but had I
+      carried hers, it would have been <strong>Kotowski</strong>. Polish surnames like this change their ending:
+      <em>-ska</em> for women, <em>-ski</em> for men.
     </p>
     <p>
-      This site used to live at <a href="https://misiu.co">misiu.co</a>. It's now <strong>nil.ski</strong>,
-      built with Astro and written in Ulysses.
+      So nil.ski is my name, given the Polish ending I never had: <strong>Nils</strong> + <strong>-ski</strong>.
+      The paper-cut rosettes around the site are a nod to <em>wycinanki</em>, the colourful Polish folk-art
+      cutouts.
+    </p>
+    <p>
+      This site used to live at <a href="https://misiu.co">misiu.co</a>.
     </p>
   </div>
+
+  <div class="about-rosette"><Rosette size="7rem" /></div>
 </Base>
 
 <style>
@@ -30,5 +53,41 @@ import '../styles/prose.css';
     letter-spacing: -0.035em;
     font-variation-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 144;
     margin: 0.4rem 0 0;
+  }
+
+  .name-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.35em 0.6em;
+    padding: 1.4rem 1rem;
+    border: 1px dashed var(--line);
+    border-radius: var(--radius);
+    background: color-mix(in srgb, #fff 55%, transparent);
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 4.5vw, 2rem);
+    font-variation-settings: 'SOFT' 100, 'WONK' 1;
+    line-height: 1.1;
+  }
+
+  .op {
+    color: var(--ink-faint);
+    font-size: 0.7em;
+  }
+
+  .suffix {
+    color: var(--coral);
+    font-style: italic;
+  }
+
+  .result em {
+    color: var(--coral);
+  }
+
+  .about-rosette {
+    display: flex;
+    justify-content: center;
+    margin-top: 4rem;
   }
 </style>
