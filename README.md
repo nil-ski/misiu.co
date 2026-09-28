@@ -86,7 +86,7 @@ src/
   lib/photos.ts         album discovery, EXIF + caption reading
   lib/strip-title.mjs   removes the Ulysses title heading from the body
   lib/prune-originals.mjs  keeps full-size originals (and their GPS data) out of the build
-  components/           Aurora, Rosette (wycinanki ornament), Gallery (justified grid + lightbox), AlbumCard, header, footer, post list
+  components/           Aurora (colour blobs), Gallery (justified grid + lightbox), AlbumCard, header, footer, post list
   pages/                home, /writing, /photos, /about, 404, /rss.xml
   styles/               global tokens + post typography
 public/                 favicon, robots.txt, CNAME

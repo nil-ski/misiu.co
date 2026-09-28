@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import PostList from '../components/PostList.astro';
-import Rosette from '../components/Rosette.astro';
 import AlbumCard from '../components/AlbumCard.astro';
 import { getPosts } from '../lib/posts';
 import { getAlbums } from '../lib/photos';
@@ -12,19 +11,16 @@ const albums = (await getAlbums()).slice(0, 3);
 
 <Base>
   <section class="wrap hero">
-    <div class="intro">
-      <p class="eyebrow">
-        <span lang="sv">Hej</span> · <span lang="pl">Cześć</span> · Hi — I'm Nils
-      </p>
-      <h1>
-        I write about <span class="mark">making things</span>, the tools I use, and the photos I take
-        <em>along the way</em>.
-      </h1>
-      <p class="name-note">
-        Swedish name, Polish roots — <a href="/about#the-name">why nil.ski?</a>
-      </p>
-    </div>
-    <div class="hero-rosette"><Rosette /></div>
+    <p class="eyebrow">
+      <span lang="sv">Hej</span> · <span lang="pl">Cześć</span> · Hi — I'm Nils
+    </p>
+    <h1>
+      I write about <span class="mark">making things</span>, the tools I use, and the photos I take
+      <em>along the way</em>.
+    </h1>
+    <p class="name-note">
+      Swedish name, Polish roots — <a href="/about#the-name">why nil.ski?</a>
+    </p>
   </section>
 
   <section class="wrap latest">
@@ -54,15 +50,11 @@ const albums = (await getAlbums()).slice(0, 3);
 
 <style>
   .hero {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) clamp(14rem, 30vw, 24rem);
-    align-items: center;
-    gap: clamp(1.5rem, 5vw, 4rem);
-    padding-block: clamp(3rem, 9vw, 6.5rem) clamp(1rem, 4vw, 3rem);
+    padding-block: clamp(3rem, 10vw, 7rem) clamp(1rem, 4vw, 3rem);
   }
 
   h1 {
-    font-size: clamp(2.4rem, 5.6vw, 4.6rem);
+    font-size: clamp(2.4rem, 6.2vw, 5rem);
     font-weight: 480;
     line-height: 1.04;
     letter-spacing: -0.03em;
@@ -82,21 +74,6 @@ const albums = (await getAlbums()).slice(0, 3);
     margin: 1.5rem 0 0;
     color: var(--ink-soft);
     font-size: 0.95rem;
-  }
-
-  .hero-rosette {
-    width: 100%;
-  }
-
-  @media (max-width: 44rem) {
-    .hero {
-      grid-template-columns: 1fr;
-    }
-    .hero-rosette {
-      order: -1;
-      width: 8.5rem;
-      justify-self: start;
-    }
   }
 
   .latest {

@@ -1,11 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
-import Rosette from '../components/Rosette.astro';
 ---
 
 <Base title="Page not found" description="This page doesn't exist.">
   <section class="wrap lost">
-    <div class="lost-rosette"><Rosette size="7rem" /></div>
     <p class="eyebrow">404</p>
     <h1>This page got <em>lost</em>.</h1>
     <p>It doesn't exist, or it moved. Let's get you <a href="/">back home</a>.</p>
@@ -15,9 +13,6 @@ import Rosette from '../components/Rosette.astro';
 <style>
   .lost {
     padding-block: clamp(3rem, 10vw, 7rem);
-  }
-  .lost-rosette {
-    margin-bottom: 2rem;
   }
   h1 {
     font-size: clamp(2.6rem, 7vw, 4.5rem);

@@ -1,10 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-32 -32 64 64">
-  <rect x="-32" y="-32" width="64" height="64" rx="16" fill="#fbf8f2"/>
-  <g fill="#ff6a4d">
-    <path id="p" d="M0 -9 C 7 -14, 5 -24, 0 -27 C -5 -24, -7 -14, 0 -9 Z"/>
-    <use href="#p" transform="rotate(45)"/><use href="#p" transform="rotate(90)"/><use href="#p" transform="rotate(135)"/>
-    <use href="#p" transform="rotate(180)"/><use href="#p" transform="rotate(225)"/><use href="#p" transform="rotate(270)"/><use href="#p" transform="rotate(315)"/>
-  </g>
-  <circle r="9" fill="#4d7cff"/>
-  <circle r="4" fill="#ffd43b"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="16" fill="#fbf8f2"/>
+  <text x="29" y="46" text-anchor="middle" font-family="Georgia, serif" font-size="40" font-weight="700" fill="#1d1b18">n</text>
+  <circle cx="48" cy="42" r="5" fill="#ff6a4d"/>
 </svg>
