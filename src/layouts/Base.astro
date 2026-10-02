@@ -1,0 +1,87 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../consts';
+
+interface Props {
+  title?: string;
+  description?: string;
+  type?: 'website' | 'article';
+}
+
+const { title, description = SITE.description, type = 'website' } = Astro.props;
+const pageTitle = title ? `${title} · ${SITE.title}` : `${SITE.title} — ${SITE.author}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={SITE.title} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title ?? SITE.title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={SITE.title} />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip sr-only" href="#main">Skip to content</a>
+    <div class="page">
+      <main id="main">
+        <slot />
+      </main>
+      <Header />
+      <Footer />
+    </div>
+  </body>
+</html>
+
+<style>
+  /* Content on the left, the menu in a column on the right (top on small screens) */
+  .page {
+    display: grid;
+    grid-template-columns: minmax(0, 48rem) 10rem;
+    grid-template-areas:
+      'main side'
+      'foot side';
+    column-gap: clamp(2rem, 6vw, 5rem);
+    padding: 2.5rem var(--gutter) 2rem;
+    max-width: calc(48rem + 10rem + 5rem + 2 * 3rem);
+  }
+
+  main {
+    grid-area: main;
+    min-width: 0;
+  }
+
+  @media (max-width: 52rem) {
+    .page {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: 'side' 'main' 'foot';
+      padding-top: 1.25rem;
+    }
+  }
+
+  .skip:focus {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    width: auto;
+    height: auto;
+    clip: auto;
+    padding: 0.25rem 0.5rem;
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    z-index: 10;
+  }
+</style>

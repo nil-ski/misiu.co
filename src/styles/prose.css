@@ -1,0 +1,82 @@
+/* Typography for rendered Markdown posts: close to browser defaults */
+.prose {
+  max-width: var(--measure);
+}
+
+.prose :where(p, ul, ol, blockquote, pre, table, figure) {
+  margin: 0 0 1em;
+}
+
+.prose h2 {
+  font-size: 1.45em;
+  margin: 1.8em 0 0.4em;
+}
+
+.prose h3 {
+  font-size: 1.2em;
+  margin: 1.6em 0 0.4em;
+}
+
+.prose h4 {
+  font-size: 1em;
+  margin: 1.4em 0 0.4em;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.4em;
+}
+
+.prose blockquote {
+  margin-left: 0;
+  padding-left: 1em;
+  border-left: 3px solid var(--line);
+  color: var(--ink-soft);
+}
+
+.prose img {
+  display: block;
+}
+
+.prose figcaption,
+.prose img + em {
+  display: block;
+  margin-top: 0.4em;
+  font-size: 0.9em;
+  color: var(--ink-faint);
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
+
+.prose pre {
+  font-size: 0.85em;
+  line-height: 1.5;
+  padding: 0.8em 1em;
+  background: var(--tint) !important;
+  overflow-x: auto;
+}
+
+.prose pre code {
+  font-size: inherit;
+}
+
+.prose table {
+  border-collapse: collapse;
+  display: block;
+  overflow-x: auto;
+}
+
+.prose th,
+.prose td {
+  padding: 0.3em 0.75em 0.3em 0;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+.prose .footnotes {
+  margin-top: 2.5em;
+  font-size: 0.9em;
+}

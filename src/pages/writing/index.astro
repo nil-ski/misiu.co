@@ -1,0 +1,37 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts } from '../../lib/posts';
+
+const posts = await getPosts();
+const byYear = Map.groupBy(posts, (post) => post.date.getUTCFullYear());
+---
+
+<Base title="Writing" description="Everything I've written, newest first.">
+  <section class="measure intro">
+    <h1>Writing</h1>
+    <p class="lede">{posts.length} {posts.length === 1 ? 'post' : 'posts'}, newest first.</p>
+  </section>
+
+  <div class="measure years">
+    {
+      [...byYear].map(([year, list]) => (
+        <section class="year">
+          <h2>{year}</h2>
+          <PostList posts={list} summaries />
+        </section>
+      ))
+    }
+  </div>
+</Base>
+
+<style>
+  .lede {
+    margin: 0 0 1.5rem;
+    color: var(--ink-faint);
+  }
+  .year h2 {
+    font-size: 1.1rem;
+    margin: 1.5rem 0 0.5rem;
+  }
+</style>

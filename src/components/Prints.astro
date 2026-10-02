@@ -1,0 +1,52 @@
+---
+import { Image } from 'astro:assets';
+import type { Photo } from '../lib/photos';
+
+interface Props {
+  prints: { photo: Photo; href: string }[];
+}
+const { prints } = Astro.props;
+---
+
+<ul class="prints" aria-label="Recent photos">
+  {
+    prints.map(({ photo, href }) => (
+      <li>
+        <a href={href}>
+          <Image src={photo.image} alt={photo.alt} widths={[200, 320, 480]} sizes="10rem" />
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .prints {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.5rem;
+    list-style: none;
+    margin: 1.5rem 0;
+    padding: 0;
+  }
+
+  a,
+  img {
+    display: block;
+  }
+
+  img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  @media (max-width: 36rem) {
+    .prints {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    li:nth-child(n + 4) {
+      display: none;
+    }
+  }
+</style>

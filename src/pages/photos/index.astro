@@ -1,0 +1,31 @@
+---
+import Base from '../../layouts/Base.astro';
+import AlbumCard from '../../components/AlbumCard.astro';
+import { getAlbums } from '../../lib/photos';
+
+const albums = await getAlbums();
+const total = albums.reduce((sum, album) => sum + album.photos.length, 0);
+---
+
+<Base title="Photos" description="Photo albums — mostly places, light and the odd street corner.">
+  <section class="wrap intro">
+    <h1>Photos</h1>
+    <p class="lede">Things I've pointed a camera at. {albums.length} albums, {total} photos.</p>
+  </section>
+
+  <div class="wrap albums">
+    {albums.map((album) => <AlbumCard album={album} />)}
+  </div>
+</Base>
+
+<style>
+  .lede {
+    margin: 0 0 1.5rem;
+    color: var(--ink-faint);
+  }
+  .albums {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
+    gap: 1.5rem;
+  }
+</style>

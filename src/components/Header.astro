@@ -1,0 +1,91 @@
+---
+import { NAV } from '../consts';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+
+<header class="side">
+  <a class="name" href="/" aria-current={path === '/' ? 'page' : undefined}>nil.ski</a>
+  <nav aria-label="Main">
+    <ul>
+      {
+        NAV.filter((item) => item.href !== '/').map((item) => (
+          <li>
+            <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .side {
+    grid-area: side;
+    position: sticky;
+    top: 2.5rem;
+    align-self: start;
+  }
+
+  .name {
+    display: block;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+    margin-bottom: 0.75rem;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li + li {
+    margin-top: 0.2rem;
+  }
+
+  a[aria-current='page'] {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  nav a[aria-current='page']::before {
+    content: '→ ';
+  }
+
+  /* Small screens: a single line above the content */
+  @media (max-width: 52rem) {
+    .side {
+      position: static;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .name {
+      margin: 0;
+    }
+
+    ul {
+      display: flex;
+      gap: 1rem;
+    }
+
+    li + li {
+      margin: 0;
+    }
+
+    nav a[aria-current='page']::before {
+      content: none;
+    }
+  }
+</style>

@@ -1,0 +1,65 @@
+---
+import { formatDate, type Post } from '../lib/posts';
+
+interface Props {
+  posts: Post[];
+  /** Show each post's summary under its title. */
+  summaries?: boolean;
+}
+const { posts, summaries = false } = Astro.props;
+---
+
+<ol class="posts">
+  {
+    posts.map((post) => (
+      <li>
+        <time datetime={post.date.toISOString()}>{formatDate(post.date, 'short')}</time>
+        <div>
+          <a href={`/writing/${post.id}`}>{post.title}</a>
+          {post.draft && <span class="draft">draft</span>}
+          {summaries && post.description && <p>{post.description}</p>}
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .posts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: 7.5rem 1fr;
+    gap: 0.5rem;
+    padding: 0.15rem 0;
+  }
+
+  time {
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  p {
+    margin: 0 0 0.4rem;
+    color: var(--ink-soft);
+    font-size: 0.95em;
+  }
+
+  .draft {
+    margin-left: 0.4rem;
+    color: #b00;
+    font-size: 0.85em;
+  }
+
+  @media (max-width: 30rem) {
+    li {
+      grid-template-columns: 1fr;
+      gap: 0;
+      padding: 0.35rem 0;
+    }
+  }
+</style>

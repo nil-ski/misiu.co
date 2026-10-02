@@ -1,0 +1,81 @@
+---
+import { render } from 'astro:content';
+import { getImage } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Gallery from '../../components/Gallery.astro';
+import { getAlbums, type Album } from '../../lib/photos';
+import { formatDate } from '../../lib/posts';
+import '../../styles/prose.css';
+
+export async function getStaticPaths() {
+  const albums = await getAlbums();
+  return albums.map((album, i) => ({
+    params: { album: album.id },
+    props: { album, newer: albums[i - 1], older: albums[i + 1] },
+  }));
+}
+
+interface Props {
+  album: Album;
+  newer?: Album;
+  older?: Album;
+}
+
+const { album, newer, older } = Astro.props;
+const Notes = album.entry ? (await render(album.entry)).Content : undefined;
+const ogImage = await getImage({ src: album.cover.image, width: 1200, format: 'jpg' });
+---
+
+<Base title={album.title} description={album.description ?? `${album.photos.length} photos from ${album.title}.`}>
+  <meta slot="head" property="og:image" content={new URL(ogImage.src, Astro.site)} />
+
+  <header class="wrap intro">
+    <p class="eyebrow"><a href="/photos">Photos</a> / {formatDate(album.date)}</p>
+    <h1>{album.title}</h1>
+    {album.description && <p class="lede">{album.description}</p>}
+  </header>
+
+  {
+    Notes && (
+      <div class="wrap">
+        <div class="notes prose">
+          <Notes />
+        </div>
+      </div>
+    )
+  }
+
+  <div class="wrap">
+    <Gallery photos={album.photos} title={album.title} />
+  </div>
+
+  <nav class="wrap pager" aria-label="More albums">
+    {older ? <a href={`/photos/${older.id}`}>← {older.title}</a> : <span />}
+    {newer && <a href={`/photos/${newer.id}`}>{newer.title} →</a>}
+  </nav>
+</Base>
+
+<style>
+  .intro {
+    margin-bottom: 1.5rem;
+  }
+  .eyebrow {
+    margin: 0 0 0.25rem;
+  }
+  h1 {
+    margin: 0;
+  }
+  .lede {
+    max-width: var(--measure);
+    margin: 0.5rem 0 0;
+  }
+  .notes {
+    margin-bottom: 1.5rem;
+  }
+  .pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+</style>

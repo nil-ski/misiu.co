@@ -1,0 +1,101 @@
+---
+import Base from '../layouts/Base.astro';
+import Prints from '../components/Prints.astro';
+import { formatDate, getPosts } from '../lib/posts';
+import { getAlbums } from '../lib/photos';
+
+const posts = await getPosts();
+const albums = await getAlbums();
+
+// A handful of recent photos, taken round-robin from the newest albums
+const prints = [];
+for (let i = 0; prints.length < 5 && i < 5; i++) {
+  for (const album of albums.slice(0, 3)) {
+    const photo = album.photos[i];
+    if (photo && prints.length < 5) prints.push({ photo, href: `/photos/${album.id}#photo-${photo.id}` });
+  }
+}
+
+// Writing and photo albums in one journal-like stream
+const recent = [
+  ...posts.map((post) => ({ date: post.date, title: post.title, href: `/writing/${post.id}`, kind: '' })),
+  ...albums.map((album) => ({
+    date: album.date,
+    title: album.title,
+    href: `/photos/${album.id}`,
+    kind: `${album.photos.length} photos`,
+  })),
+]
+  .sort((a, b) => b.date.valueOf() - a.date.valueOf())
+  .slice(0, 10);
+---
+
+<Base>
+  <h1><span lang="sv">Hej</span>, I'm Nils.</h1>
+  <p class="intro">
+    This is my corner of the internet, where I write about things I make and the tools I use, and keep the
+    photographs I take along the way. Swedish name, Polish roots — <a href="/about#the-name">that's where nil.ski
+    comes from</a>.
+  </p>
+
+  {prints.length > 0 && <Prints prints={prints} />}
+
+  <h2>Recently</h2>
+  <ul class="recent">
+    {
+      recent.map((item) => (
+        <li>
+          <time datetime={item.date.toISOString()}>{formatDate(item.date, 'short')}</time>
+          <span>
+            <a href={item.href}>{item.title}</a>
+            {item.kind && <span class="kind"> ({item.kind})</span>}
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+  <p>
+    More in <a href="/writing">writing</a> and <a href="/photos">photos</a>.
+  </p>
+</Base>
+
+<style>
+  .intro {
+    max-width: var(--measure);
+  }
+
+  h2 {
+    font-size: 1.3rem;
+    margin: 2rem 0 0.5rem;
+  }
+
+  .recent {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+  }
+
+  .recent li {
+    display: grid;
+    grid-template-columns: 7.5rem 1fr;
+    gap: 0.5rem;
+    padding: 0.15rem 0;
+  }
+
+  time {
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 30rem) {
+    .recent li {
+      grid-template-columns: 1fr;
+      gap: 0;
+      padding: 0.35rem 0;
+    }
+  }
+
+  .kind {
+    color: var(--ink-faint);
+  }
+</style>

@@ -1,0 +1,46 @@
+---
+import { Image } from 'astro:assets';
+import { formatDate } from '../lib/posts';
+import type { Album } from '../lib/photos';
+
+interface Props {
+  album: Album;
+}
+const { album } = Astro.props;
+---
+
+<div class="card">
+  <a href={`/photos/${album.id}`} tabindex="-1" aria-hidden="true"><Image
+    src={album.cover.image}
+    alt={album.cover.alt}
+    widths={[400, 640, 900]}
+    sizes="(max-width: 40rem) 90vw, 16rem"
+    class="cover"
+  /></a>
+  <a class="title" href={`/photos/${album.id}`}>{album.title}</a>
+  <span class="meta">{formatDate(album.date, 'short')} · {album.photos.length} photos</span>
+</div>
+
+<style>
+  .card {
+    display: block;
+  }
+
+  .cover {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .title {
+    display: inline-block;
+    margin-top: 0.4rem;
+  }
+
+  .meta {
+    display: block;
+    font-size: 0.9rem;
+  }
+</style>

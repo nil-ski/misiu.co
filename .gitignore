@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+.env
+
+# Photos are mirrored from the photo bucket at build time (npm run photos)
+src/content/photos/*
+!src/content/photos/.gitkeep
