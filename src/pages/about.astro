@@ -4,75 +4,21 @@ import '../styles/prose.css';
 ---
 
 <Base title="About" description="A little about Nils, and where the name nil.ski comes from.">
-  <section class="measure intro">
-    <h1>About</h1>
-  </section>
+  <h1>About</h1>
 
-  <div class="measure prose">
+  <div class="prose">
     <p>
       Placeholder copy — swap it for a few lines about who you are, what you do and what you'd like
       people to get in touch about.
     </p>
 
     <h2 id="the-name">Why nil.ski?</h2>
-
-    <div class="name-card" aria-label="Nils plus -ski makes Nilski">
-      <span>Nils</span>
-      <span class="op">+</span>
-      <span class="suffix">-ski</span>
-      <span class="op">=</span>
-      <span class="result">Nil<em>ski</em></span>
-    </div>
-
     <p>
-      My mum is Polish; her surname is Kotowska. I grew up with a Swedish surname instead, but had I
-      carried hers, it would have been <strong>Kotowski</strong>. Polish surnames like this change their ending:
+      My mum is Polish; her surname is Kotowska. I grew up with a Swedish surname instead, but had I carried
+      hers, it would have been <strong>Kotowski</strong>. Polish surnames like this change their ending:
       <em>-ska</em> for women, <em>-ski</em> for men.
     </p>
-    <p>
-      So nil.ski is my name, given the Polish ending I never had: <strong>Nils</strong> + <strong>-ski</strong>.
-    </p>
-    <p>
-      This site used to live at <a href="https://misiu.co">misiu.co</a>.
-    </p>
+    <p>So nil.ski is my name, given the Polish ending I never had: Nils + -ski = Nilski.</p>
+    <p>This site used to live at <a href="https://misiu.co">misiu.co</a>.</p>
   </div>
 </Base>
-
-<style>
-  .intro {
-    padding-block: clamp(2.5rem, 8vw, 4.5rem) 1rem;
-  }
-  h1 {
-    font-size: clamp(2.2rem, 6vw, 3.1rem);
-    font-variation-settings: 'SOFT' 100, 'WONK' 1;
-    margin: 0;
-  }
-
-  .name-card {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: center;
-    gap: 0.35em 0.6em;
-    padding: 0.5rem 0;
-    font-family: var(--font-display);
-    font-size: clamp(1.4rem, 4.5vw, 1.8rem);
-    font-variation-settings: 'SOFT' 100, 'WONK' 1;
-    line-height: 1.1;
-  }
-
-  .op {
-    color: var(--ink-faint);
-    font-size: 0.7em;
-  }
-
-  .suffix {
-    color: var(--coral);
-    font-style: italic;
-  }
-
-  .result em {
-    color: var(--coral);
-  }
-
-</style>

@@ -57,37 +57,25 @@ const ogImage = await getImage({ src: album.cover.image, width: 1200, format: 'j
 
 <style>
   .intro {
-    padding-block: clamp(2.5rem, 8vw, 4.5rem) 1.5rem;
+    margin-bottom: 1.5rem;
   }
-  .eyebrow a {
-    text-decoration: none;
+  .eyebrow {
+    margin: 0 0 0.25rem;
   }
   h1 {
-    font-size: clamp(2.2rem, 6vw, 3.1rem);
-    font-variation-settings: 'SOFT' 100, 'WONK' 1;
-    margin: 0.3rem 0 0;
+    margin: 0;
   }
   .lede {
-    max-width: 36rem;
-    margin: 0.6rem 0 0;
-    color: var(--ink-soft);
+    max-width: var(--measure);
+    margin: 0.5rem 0 0;
   }
   .notes {
-    max-width: var(--measure);
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
   .pager {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-    margin-top: 3rem;
-    font-family: var(--font-display);
-    font-size: 1.1rem;
-  }
-  .pager a {
-    text-decoration: none;
-  }
-  .pager a:hover {
-    color: var(--coral);
+    margin-top: 2rem;
   }
 </style>

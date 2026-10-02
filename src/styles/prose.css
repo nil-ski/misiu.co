@@ -1,147 +1,82 @@
-/* Typography for rendered Markdown posts */
+/* Typography for rendered Markdown posts: close to browser defaults */
 .prose {
-  color: var(--ink);
+  max-width: var(--measure);
 }
 
-.prose :where(p, ul, ol) {
-  margin-block: 0;
-}
-
-.prose > * + * {
-  margin-block-start: 1.2em;
+.prose :where(p, ul, ol, blockquote, pre, table, figure) {
+  margin: 0 0 1em;
 }
 
 .prose h2 {
-  font-size: 1.75em;
-  margin-block-start: 2em;
+  font-size: 1.45em;
+  margin: 1.8em 0 0.4em;
 }
 
 .prose h3 {
-  font-size: 1.35em;
-  margin-block-start: 1.8em;
-}
-
-.prose :is(h2, h3, h4) {
-  margin-block-end: 0;
-}
-
-.prose :is(h2, h3, h4) + * {
-  margin-block-start: 0.5em;
+  font-size: 1.2em;
+  margin: 1.6em 0 0.4em;
 }
 
 .prose h4 {
-  font-size: 1.1em;
-  margin-block-start: 1.6em;
+  font-size: 1em;
+  margin: 1.4em 0 0.4em;
 }
 
 .prose ul,
 .prose ol {
-  padding-left: 1.3em;
-}
-
-.prose li + li {
-  margin-top: 0.35em;
-}
-
-.prose li::marker {
-  color: var(--accent);
+  padding-left: 1.4em;
 }
 
 .prose blockquote {
-  margin-inline: 0;
-  padding: 0.2em 0 0.2em 1.25em;
-  border-left: 3px solid var(--lemon);
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1.15em;
+  margin-left: 0;
+  padding-left: 1em;
+  border-left: 3px solid var(--line);
   color: var(--ink-soft);
-}
-
-.prose mark {
-  background: color-mix(in srgb, var(--lemon) 70%, transparent);
-  padding-inline: 0.15em;
-  border-radius: 0.2em;
-}
-
-.prose hr {
-  border: 0;
-  height: 1.5rem;
-  margin-block: 2.5em;
-  background: radial-gradient(circle, var(--coral) 3px, transparent 3.5px) center / 1.5rem 1.5rem repeat-x;
-  width: 4.5rem;
-  margin-inline: auto;
 }
 
 .prose img {
   display: block;
-  border-radius: var(--radius);
-  margin-inline: auto;
-}
-
-/* A photo on its own line breaks out wider than the text column */
-.prose p:has(> img:only-child) {
-  width: min(100vw - 2 * var(--gutter), 60rem);
-  margin-inline: 50%;
-  translate: -50% 0;
-}
-
-.prose p:has(> img:only-child) img {
-  width: 100%;
-}
-
-.prose figure {
-  margin-inline: 0;
 }
 
 .prose figcaption,
 .prose img + em {
   display: block;
-  margin-top: 0.6em;
-  text-align: center;
-  font-size: 0.85em;
+  margin-top: 0.4em;
+  font-size: 0.9em;
   color: var(--ink-faint);
 }
 
 .prose code {
   font-family: var(--font-mono);
-  font-size: 0.86em;
-  background: var(--paper-2);
-  padding: 0.12em 0.35em;
-  border-radius: 0.35em;
+  font-size: 0.85em;
 }
 
 .prose pre {
   font-size: 0.85em;
-  line-height: 1.55;
-  padding: 1.1em 1.25em;
-  border-radius: var(--radius);
-  border: 1px solid var(--line);
+  line-height: 1.5;
+  padding: 0.8em 1em;
+  background: var(--tint) !important;
   overflow-x: auto;
 }
 
 .prose pre code {
-  background: none;
-  padding: 0;
   font-size: inherit;
 }
 
 .prose table {
-  width: 100%;
   border-collapse: collapse;
-  font-size: 0.92em;
   display: block;
   overflow-x: auto;
 }
 
 .prose th,
 .prose td {
-  padding: 0.5em 0.75em;
+  padding: 0.3em 0.75em 0.3em 0;
   border-bottom: 1px solid var(--line);
   text-align: left;
 }
 
 .prose .footnotes {
-  margin-top: 3em;
-  font-size: 0.88em;
-  color: var(--ink-soft);
+  margin-top: 2.5em;
+  font-size: 0.9em;
 }

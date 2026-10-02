@@ -6,15 +6,14 @@ interface Props {
   prints: { photo: Photo; href: string }[];
 }
 const { prints } = Astro.props;
-const tilts = [-3, 2, -1.5, 3, -2.5];
 ---
 
 <ul class="prints" aria-label="Recent photos">
   {
-    prints.map(({ photo, href }, i) => (
-      <li style={`--tilt:${tilts[i % tilts.length]}deg; --i:${i}`}>
+    prints.map(({ photo, href }) => (
+      <li>
         <a href={href}>
-          <Image src={photo.image} alt={photo.alt} widths={[240, 400, 600]} sizes="12rem" />
+          <Image src={photo.image} alt={photo.alt} widths={[200, 320, 480]} sizes="10rem" />
         </a>
       </li>
     ))
@@ -22,53 +21,30 @@ const tilts = [-3, 2, -1.5, 3, -2.5];
 </ul>
 
 <style>
-  /* A few snapshots dropped loosely on the table */
   .prints {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.5rem;
     list-style: none;
-    width: min(100% - 2 * var(--gutter), 46rem);
-    margin: 1rem auto 0;
-    padding: 1rem 0.6rem;
+    margin: 1.5rem 0;
+    padding: 0;
   }
 
-  li {
-    flex: 0 1 12rem;
-    min-width: 0;
-    margin-inline: -0.6rem;
-    rotate: var(--tilt);
-    transition: rotate 0.35s ease, translate 0.35s ease;
-  }
-
-  li:nth-child(even) {
-    translate: 0 0.8rem;
-  }
-
-  a {
+  a,
+  img {
     display: block;
-    padding: 0.45rem 0.45rem 1.6rem;
-    background: #fff;
-    box-shadow:
-      0 1px 2px rgb(35 32 28 / 0.1),
-      0 10px 24px -14px rgb(35 32 28 / 0.35);
   }
 
   img {
-    display: block;
     width: 100%;
-    height: auto;
     aspect-ratio: 1;
     object-fit: cover;
   }
 
-  li:hover {
-    rotate: 0deg;
-    translate: 0 -0.4rem;
-    z-index: 1;
-  }
-
   @media (max-width: 36rem) {
+    .prints {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
     li:nth-child(n + 4) {
       display: none;
     }

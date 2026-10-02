@@ -4,30 +4,23 @@
 @import '@fontsource-variable/newsreader/opsz-italic.css';
 @import '@fontsource-variable/jetbrains-mono';
 
+/* Deliberately plain: black on white, browser-blue links. */
 :root {
-  --paper: #fcfaf6;
-  --paper-2: #f3efe7;
-  --ink: #23201c;
-  --ink-soft: #5a544b;
-  --ink-faint: #8d867a;
-  --line: #e7e1d6;
-
-  --coral: #ff6a4d;
-  --sky: #4d7cff;
-  --lemon: #ffd43b;
-  --mint: #35c98e;
-  --lilac: #b69cff;
-
-  --accent: var(--coral);
+  --paper: #fff;
+  --ink: #111;
+  --ink-soft: #333;
+  --ink-faint: #666;
+  --line: #ddd;
+  --tint: #f4f4f4;
+  --link: #0000ee;
+  --visited: #551a8b;
 
   --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
   --font-body: 'Newsreader Variable', 'Iowan Old Style', Georgia, serif;
   --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', monospace;
 
-  --measure: 36rem;
-  --wide: 62rem;
-  --gutter: clamp(1rem, 4vw, 2rem);
-  --radius: 1.25rem;
+  --measure: 38rem;
+  --gutter: clamp(1.25rem, 5vw, 3rem);
 
   color-scheme: light;
 }
@@ -40,26 +33,16 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  text-rendering: optimizeLegibility;
-  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-body);
-  font-size: clamp(1.125rem, 0.4vw + 1rem, 1.25rem);
-  line-height: 1.6;
+  font-size: clamp(1.125rem, 0.3vw + 1.05rem, 1.25rem);
+  line-height: 1.55;
   font-optical-sizing: auto;
-  overflow-x: hidden;
-}
-
-main {
-  flex: 1;
 }
 
 img,
@@ -70,26 +53,16 @@ video {
 }
 
 a {
-  color: inherit;
-  text-decoration-color: color-mix(in srgb, var(--accent) 60%, transparent);
-  text-decoration-thickness: 0.09em;
-  text-underline-offset: 0.2em;
-  transition: text-decoration-color 0.2s, color 0.2s;
+  color: var(--link);
 }
 
-a:hover {
-  text-decoration-color: var(--accent);
+a:visited {
+  color: var(--visited);
 }
 
 :focus-visible {
-  outline: 2px solid var(--sky);
-  outline-offset: 3px;
-  border-radius: 4px;
-}
-
-::selection {
-  background: var(--lemon);
-  color: var(--ink);
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
 }
 
 h1,
@@ -99,29 +72,29 @@ h4 {
   font-family: var(--font-display);
   font-weight: 500;
   font-variation-settings: 'SOFT' 50, 'WONK' 0;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
+  line-height: 1.2;
   text-wrap: balance;
 }
 
+h1 {
+  font-size: 2rem;
+  margin: 0 0 0.75rem;
+}
+
+/* Kept for markup that still uses them: plain full-width blocks inside the main column */
 .wrap {
-  width: min(100% - 2 * var(--gutter), var(--wide));
-  margin-inline: auto;
+  width: 100%;
 }
 
 .measure {
-  width: min(100% - 2 * var(--gutter), var(--measure));
-  margin-inline: auto;
+  max-width: var(--measure);
 }
 
-.eyebrow {
+.eyebrow,
+.meta {
   font-style: italic;
-  font-size: 0.95rem;
+  font-size: 0.95em;
   color: var(--ink-faint);
-}
-
-.eyebrow a {
-  color: inherit;
 }
 
 .sr-only {
@@ -133,15 +106,17 @@ h4 {
   white-space: nowrap;
 }
 
+hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 2rem 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
   *,
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
 }

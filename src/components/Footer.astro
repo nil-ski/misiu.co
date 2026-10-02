@@ -3,22 +3,17 @@ import { SITE } from '../consts';
 const year = new Date().getFullYear();
 ---
 
-<footer class="wrap site-footer">
-  <p>Thanks for stopping by. — {SITE.author}, {year}</p>
-  <p><a href="/rss.xml">RSS</a></p>
+<footer class="site-footer">
+  <p>— {SITE.author}, {year} · <a href="/rss.xml">RSS</a></p>
 </footer>
 
 <style>
   .site-footer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 0.5rem 1rem;
-    margin-top: 6rem;
-    padding-block: 1.5rem 2.5rem;
+    grid-area: foot;
+    margin-top: 4rem;
+    padding-top: 1rem;
     border-top: 1px solid var(--line);
-    font-style: italic;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: var(--ink-faint);
   }
   p {

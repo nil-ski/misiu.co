@@ -26,7 +26,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title={SITE.title} href="/rss.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <meta name="theme-color" content="#fcfaf6" />
+    <meta name="theme-color" content="#ffffff" />
     <meta property="og:type" content={type} />
     <meta property="og:title" content={title ?? SITE.title} />
     <meta property="og:description" content={description} />
@@ -36,19 +36,42 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body>
     <a class="skip sr-only" href="#main">Skip to content</a>
-    <Header />
-    <main id="main">
-      <slot />
-    </main>
-    <Footer />
+    <div class="page">
+      <main id="main">
+        <slot />
+      </main>
+      <Header />
+      <Footer />
+    </div>
   </body>
 </html>
 
 <style>
-  body {
-    position: relative;
-    isolation: isolate;
+  /* Content on the left, the menu in a column on the right (top on small screens) */
+  .page {
+    display: grid;
+    grid-template-columns: minmax(0, 48rem) 10rem;
+    grid-template-areas:
+      'main side'
+      'foot side';
+    column-gap: clamp(2rem, 6vw, 5rem);
+    padding: 2.5rem var(--gutter) 2rem;
+    max-width: calc(48rem + 10rem + 5rem + 2 * 3rem);
   }
+
+  main {
+    grid-area: main;
+    min-width: 0;
+  }
+
+  @media (max-width: 52rem) {
+    .page {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: 'side' 'main' 'foot';
+      padding-top: 1.25rem;
+    }
+  }
+
   .skip:focus {
     position: fixed;
     top: 1rem;
@@ -56,10 +79,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     width: auto;
     height: auto;
     clip: auto;
-    padding: 0.5rem 1rem;
-    background: var(--ink);
-    color: var(--paper);
-    border-radius: 999px;
+    padding: 0.25rem 0.5rem;
+    background: var(--paper);
+    border: 1px solid var(--ink);
     z-index: 10;
   }
 </style>

@@ -26,25 +26,12 @@ const byYear = Map.groupBy(posts, (post) => post.date.getUTCFullYear());
 </Base>
 
 <style>
-  .intro {
-    padding-block: clamp(2.5rem, 8vw, 4.5rem) 1rem;
-  }
-  h1 {
-    font-size: clamp(2.2rem, 6vw, 3.1rem);
-    font-variation-settings: 'SOFT' 100, 'WONK' 1;
-    margin: 0;
-  }
   .lede {
-    margin: 0.4rem 0 0;
-    font-style: italic;
+    margin: 0 0 1.5rem;
     color: var(--ink-faint);
-  }
-  .year {
-    padding-block: 1.25rem 0.5rem;
   }
   .year h2 {
     font-size: 1.1rem;
-    color: var(--ink-faint);
-    margin: 0 0 0.5rem;
+    margin: 1.5rem 0 0.5rem;
   }
 </style>

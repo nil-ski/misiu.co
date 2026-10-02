@@ -5,8 +5,8 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
 ---
 
-<header class="wrap site-header">
-  <a class="name" href="/" aria-label="nil.ski — home" aria-current={path === '/' ? 'page' : undefined}>nil.ski</a>
+<header class="side">
+  <a class="name" href="/" aria-current={path === '/' ? 'page' : undefined}>nil.ski</a>
   <nav aria-label="Main">
     <ul>
       {
@@ -23,51 +23,69 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
 </header>
 
 <style>
-  .site-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-    padding-block: 2rem 1rem;
+  .side {
+    grid-area: side;
+    position: sticky;
+    top: 2.5rem;
+    align-self: start;
   }
 
   .name {
-    font-weight: 560;
+    display: block;
+    font-weight: 600;
+    color: var(--ink);
     text-decoration: none;
-  }
-
-  .name:hover {
-    text-decoration: underline;
-    text-decoration-color: var(--coral);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.3em;
+    margin-bottom: 0.75rem;
   }
 
   ul {
-    display: flex;
-    gap: 1.4rem;
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  nav a {
-    color: var(--ink-soft);
+  li + li {
+    margin-top: 0.2rem;
+  }
+
+  a[aria-current='page'] {
+    color: var(--ink);
     text-decoration: none;
   }
 
-  nav a:hover,
-  nav a[aria-current='page'] {
-    color: var(--ink);
-    text-decoration: underline;
-    text-decoration-color: var(--coral);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.3em;
+  nav a[aria-current='page']::before {
+    content: '→ ';
   }
 
-  @media (max-width: 26rem) {
+  /* Small screens: a single line above the content */
+  @media (max-width: 52rem) {
+    .side {
+      position: static;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .name {
+      margin: 0;
+    }
+
     ul {
+      display: flex;
       gap: 1rem;
+    }
+
+    li + li {
+      margin: 0;
+    }
+
+    nav a[aria-current='page']::before {
+      content: none;
     }
   }
 </style>
